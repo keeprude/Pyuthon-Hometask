@@ -1,1 +1,1 @@
-# Python-Hometask
+Repository for University hometask.
