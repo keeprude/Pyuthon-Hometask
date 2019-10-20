@@ -31,27 +31,26 @@ def mfcc_iter(data_path, answer_path, start, stop):
         if not os.path.exists(tmp_save) :
             os.mkdir(tmp_save)
         mfcc(tmp_data, tmp_save)
+        
 
-if __name__ == 'main':
+list_of_files = os.listdir(data_path)
+length = len(list_of_files)
 
-    list_of_files = os.listdir(data_path)
-    length = len(list_of_files)
+thread1 = Thread(target = mfcc_iter, args = (data_path, answer_path, 0, length//4, ))
+thread2 = Thread(target = mfcc_iter, args = (data_path, answer_path, length//4, length//2, ))
+thread3 = Thread(target = mfcc_iter, args = (data_path, answer_path, length//2, 3*length//4, ))
+thread4 = Thread(target = mfcc_iter, args = (data_path, answer_path, 3*length//4, length, ))
 
-    thread1 = Thread(target = mfcc_iter, args = (data_path, answer_path, 0, length//4, ))
-    thread2 = Thread(target = mfcc_iter, args = (data_path, answer_path, length//4, length//2, ))
-    thread3 = Thread(target = mfcc_iter, args = (data_path, answer_path, length//2, 3*length//4, ))
-    thread4 = Thread(target = mfcc_iter, args = (data_path, answer_path, 3*length//4, length, ))
+start_time = time.time()
+thread1.start()
+thread2.start()
+thread3.start()
+thread4.start()
 
-    start_time = time.time()
-    thread1.start()
-    thread2.start()
-    thread3.start()
-    thread4.start()
+thread1.join()
+thread2.join()
+thread3.join()
+thread4.join()
+finish_time = time.time()
 
-    thread1.join()
-    thread2.join()
-    thread3.join()
-    thread4.join()
-    finish_time = time.time()
-
-    print(finish_time - start_time)
+print(finish_time - start_time)
