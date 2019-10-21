@@ -36,14 +36,11 @@ if __name__ == "__main__":
         
     list_of_files = os.listdir(data_path)
     length = len(list_of_files)
-    part_1 = length % 4
-    part_2 = length % 2
-    part_3 = 3 * length % 4 
     
-    thread1 = Thread(target = mfcc_iter, args = (data_path, answer_path, 0, length//4 + part_1, ))
-    thread2 = Thread(target = mfcc_iter, args = (data_path, answer_path, length//4, length//2 + part_2, ))
-    thread3 = Thread(target = mfcc_iter, args = (data_path, answer_path, length//2, 3*length//4 + part_3, ))
-    thread4 = Thread(target = mfcc_iter, args = (data_path, answer_path, 3*length//4, length, ))
+    thread1 = Thread(target = mfcc_iter, args = (data_path, answer_path, 0, length // 4, ))
+    thread2 = Thread(target = mfcc_iter, args = (data_path, answer_path, length // 4, length // 2, ))
+    thread3 = Thread(target = mfcc_iter, args = (data_path, answer_path, length // 2, 3 * length // 4, ))
+    thread4 = Thread(target = mfcc_iter, args = (data_path, answer_path, 3 * length // 4, length, ))
 
     start_time = time.time()
     thread1.start()
