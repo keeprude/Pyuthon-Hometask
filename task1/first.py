@@ -1,91 +1,122 @@
+"""solution"""
+
 class Node:
-    def __init__ (self, value = None, next = None):
+    """definition of nodes for SinglyLinkedList"""
+
+    def __init__(self, value=None, next=None):
         self.value = value
         self.next = next
 
 class SinglyLinkedList:
-    def __init__ (self):
+    """definition of the class"""
+
+    def __init__(self):
         self.first = None
         self.last = None
         self.len = 0
 
-    def length(self) :
+    def length(self):
+        """returns the number of elements in SinglyLinkedList"""
+
         return self.len
 
-    def push (self, x):
-        if self.first == None :
-            self.first = Node(x)
+    def push(self, num):
+        """puts element in the beginning of the SinglyLinkedList"""
+
+        if self.first is None:
+            self.first = Node(num)
             self.last = self.first
         else:
-            self.first = Node(x, self.first)
+            self.first = Node(num, self.first)
         self.len += 1
 
-    def add (self, x):
-        if self.first == None :
-            self.first = Node(x)
+    def add(self, num):
+        """puts element in the end of SinglyLinkedList"""
+
+        if self.first is None:
+            self.first = Node(num)
             self.last = self.first
         else:
-            self.last.next = self.last = Node(x)
+            self.last.next = self.last = Node(num)
         self.len += 1
 
-    def search (self, x):
+    def search(self, value):
+        """returns the node with requested value"""
+
         temp = self.first
-        while temp != None :
-            if temp.value == x :
+        while temp is not None:
+            if temp.value == value:
                 return temp
             temp = temp.next
         return temp
 
-    def removebyposition (self, pos):
-        if pos == 0 :
+    def remove_by_position(self, pos):
+        """removes element in SinglyLinkedList by the requested position"""
+
+        if pos == 0:
             self.first = self.first.next
             self.len -= 1
             return
         current = self.first
-        if current == None :
+        if current is None:
             return
         else:
             previous = None
             cycle = 0
-            while current != None and cycle != pos :
+            while current is not None and cycle != pos:
                 cycle += 1
                 previous = current
                 current = current.next
-            if current != None :
+            if current is not None:
                 previous.next = current.next
                 self.len -= 1
             return
 
-    def removebyvalue (self, value):
+    def remove_by_value(self, value):
+        """removes element in SinglyLinkedList by the requested value"""
+        
         current = self.first
-        if current == None :
+        if current is None:
             return
         else:
             previous = None
-            while current != None and current.value != value :
+            while current is not None and current.value != value:
                 previous = current
                 current = current.next
-            if current != None :
+            if current is not None:
                 previous.next = current.next
                 self.len -= 1
             return
 
-    def print (self):
-        current = self.first
-        while current != None :
-            print(current.value)
-            current = current.next
+    def print(self):
+        """prints the SinglyLinkedList"""
 
-    def clear (self):
+        current = self.first
+        result = []
+        while current is not None:
+            #print(current.value)
+            result.append(current.value)
+            current = current.next
+        print(result)
+
+    def clear(self):
+        """destroys the SinglyLinkedList"""
+
         self.__init__()
         return
 
-#reversed
-def IntoList (num) :
-    list = SinglyLinkedList()
-    if int(num) == 0 :
-        list.add(int(num))
-        return list
-    for c in num :
-        list.push(int(c))
-    return list
+def into_list(num):
+    """reversed"""
+
+    my_list = SinglyLinkedList()
+    if int(num) == 0:
+        my_list.add(int(num))
+        return my_list
+    for digit in num:
+        my_list.push(int(digit))
+    return my_list
+
+if __name__ == "__main__":
+    INPUT_NUMBER = input()
+    MY_LISTING = into_list(INPUT_NUMBER)
+    SinglyLinkedList.print(MY_LISTING)
