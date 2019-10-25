@@ -1,13 +1,16 @@
+"""solution"""
+
+from threading import Thread
 import os
 import time
 import librosa
 import numpy
-from threading import Thread
 
-data_path = "/Users/keeprude/Desktop/tasktest/aac"
-answer_path = "/Users/keeprude/Desktop/answertest2"
+DATA_PATH = "/Users/keeprude/Desktop/tasktest/aac"
+ANSWER_PATH = "/Users/keeprude/Desktop/answertest2"
 
 def mfcc(data_path, answer_path):
+    """extracting mfcc"""
     list_of_obj = os.listdir(data_path)
     for obj in list_of_obj:
         path = data_path + '/' + obj
@@ -20,38 +23,40 @@ def mfcc(data_path, answer_path):
             temp = answer_path + '/' + obj[:len(obj) - 4]
             print(temp)
             y, sr = librosa.load(path)
-            arr = librosa.feature.mfcc(y = y, sr = sr)
+            arr = librosa.feature.mfcc(y=y, sr=sr)
             numpy.save(temp, arr)
 
 def mfcc_iter(data_path, answer_path, start, stop):
+    """mfcc for a portion of dirs"""
+
     list_of_obj = os.listdir(data_path)
     for i in range(start, stop):
         tmp_data = data_path + '/' + list_of_obj[i]
         tmp_save = answer_path + '/' + list_of_obj[i]
-        if not os.path.exists(tmp_save) :
+        if not os.path.exists(tmp_save):
             os.mkdir(tmp_save)
         mfcc(tmp_data, tmp_save)
-        
+
 if __name__ == "__main__":
-        
-    list_of_files = os.listdir(data_path)
-    length = len(list_of_files)
-    
-    thread1 = Thread(target = mfcc_iter, args = (data_path, answer_path, 0, length // 4, ))
-    thread2 = Thread(target = mfcc_iter, args = (data_path, answer_path, length // 4, length // 2, ))
-    thread3 = Thread(target = mfcc_iter, args = (data_path, answer_path, length // 2, 3 * length // 4, ))
-    thread4 = Thread(target = mfcc_iter, args = (data_path, answer_path, 3 * length // 4, length, ))
 
-    start_time = time.time()
-    thread1.start()
-    thread2.start()
-    thread3.start()
-    thread4.start()
+    LIST_OF_FILES = os.listdir(DATA_PATH)
+    LENGTH = len(LIST_OF_FILES)
 
-    thread1.join()
-    thread2.join()
-    thread3.join()
-    thread4.join()
-    finish_time = time.time()
+    THREAD1 = Thread(target=mfcc_iter, args=(DATA_PATH, ANSWER_PATH, 0, LENGTH//4,))
+    THREAD2 = Thread(target=mfcc_iter, args=(DATA_PATH, ANSWER_PATH, LENGTH//4, LENGTH//2,))
+    THREAD3 = Thread(target=mfcc_iter, args=(DATA_PATH, ANSWER_PATH, LENGTH//2, 3*LENGTH//4,))
+    THREAD4 = Thread(target=mfcc_iter, args=(DATA_PATH, ANSWER_PATH, 3*LENGTH//4, LENGTH,))
 
-    print(finish_time - start_time)
+    START_TIME = time.time()
+    THREAD1.start()
+    THREAD2.start()
+    THREAD3.start()
+    THREAD4.start()
+
+    THREAD1.join()
+    THREAD2.join()
+    THREAD3.join()
+    THREAD4.join()
+    FINISH_TIME = time.time()
+
+    print(FINISH_TIME - START_TIME)
