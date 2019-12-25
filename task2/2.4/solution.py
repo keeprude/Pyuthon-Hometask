@@ -1,43 +1,65 @@
 """solution"""
 
-from collections import defaultdict
+from collections import deque
 
 class Graph:
     """implementation of graph"""
 
+
     def __init__(self, edges):
-        self.node = defaultdict(list)
-        for edge in edges:
-            self.node[edge[0]].append(edge[1])
-            self.node[edge[1]].append(edge[0])
+        """РІ graph_list РЅР° i-РѕРј РјРµСЃС‚Рµ СЃС‚РѕРёС‚ РІРµСЂС€РёРЅР°(Р»РёСЃС‚) СЃ РїРѕРјРµС‚РєРѕР№ i, Р° РІ СЃР°РјРѕРј Р»РёСЃС‚Рµ 
+        СѓРєР°Р·Р°РЅС‹ РїРѕРјРµС‚РєРё РІРµСЂС€РёРЅ, Рє РєРѕС‚РѕСЂС‹Рј РґР°РЅРЅР°СЏ РІРµСЂС€РёРЅР° РёРјРµРµС‚ РґРѕСЃС‚СѓРї."""
 
-#self.node = {keys ~ nodes}
-#self.node[node] = {values connected to this key ~ destinations}
 
-    def bfs(self):
-        """breadth-first search"""
+        self.graph_list = []
+        for x in range (len(edges)):
+            while len(self.graph_list) <= edges[x][0]:
+                self.graph_list.append([])
+            while len(self.graph_list) <= edges[x][1]:
+                self.graph_list.append([])
+            self.graph_list[edges[x][0]].append(edges[x][1])
+            self.graph_list[edges[x][1]].append(edges[x][0])
+
+    def help(self):
+        """helpful lists for search"""
+
         
-       visited = ''
-        for node in self.node:
-            if str(node) not in visited:
-                print(node)
-                visited += str(node)
-            for vertex in self.node[node]:
-                if str(vertex) not in visited:
-                    print(vertex)
-                   visited += str(vertex)
+        self.visited = [False] * len(self.graph_list)
+        self.depth = [-1] * len(self.graph_list)
 
-    #def dfs(self, v):
-        #troubles with implementation.
+    def dfs(self, current):
+        """Depth-first search"""
 
-    def check(self):
-        """prints the Graph"""
 
-        print(self.node)
+        self.visited[current] = True
+        print(current)
+        for vertex in self.graph_list[current]:
+            if not self.visited[vertex]:
+                self.dfs(vertex)
 
-if __name__ == "__main__":
-    INPUT_EDGES = [[0, 3], [1, 3], [2, 3], [4, 3], [5, 4], [1, 6], [6, 7], [6, 8]]
+    def bfs(self, current):
+        """Breadth-first search"""
+
+
+        self.depth[current] = 0
+        q = deque()
+        q.append(current)
+        while q:
+            current = q.popleft()
+            print(current)
+            for vertex in self.graph_list[current]:
+                if self.depth[vertex] == -1:
+                    q.append(vertex)
+                    self.depth[vertex] = self.depth[current] + 1
+        self.depth = [-1] * len(self.graph_list)
+
+
+if __name__=="__main__":
+    INPUT_EDGES = [[0, 3], [1, 3], [2, 3], [4, 3], [5, 4], [2, 6]]
     GRAPH = Graph(INPUT_EDGES)
-    GRAPH.bfs() # result : 0 3 1 2 4 6 5 7 8
-    print('\n')
-    #graph.dfs(0) # result :
+    GRAPH.help()
+
+    print("DFS:")
+    GRAPH.dfs(0)
+    print("\nBFS:") 
+    GRAPH.bfs(0)
